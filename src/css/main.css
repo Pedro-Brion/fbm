@@ -1,0 +1,17 @@
+*{
+  margin: 0;
+}
+
+button{
+  background-color: #E6C229;
+  color: #222222;
+  font-weight: bolder;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: background-color 200ms linear;
+  &:hover{
+    background-color: #E6C229aa;
+  }
+}
