@@ -1,8 +1,6 @@
 <!-- Consts -->
 <script lang="ts">
 const PIXEL_SIZE = 0.5;
-const CANVAS_WIDTH = 800;
-const CANVAS_HEIGHT = 450;
 const wPixels = Math.ceil(CANVAS_WIDTH / PIXEL_SIZE);
 const hPixels = Math.ceil(CANVAS_HEIGHT / PIXEL_SIZE);
 
@@ -17,6 +15,7 @@ function smoothStep(min: number, max: number, x: number): number {
 }
 </script>
 <script setup lang="ts">
+import { CANVAS_HEIGHT, CANVAS_WIDTH } from "@/utils/constants";
 import { onMounted, ref } from "vue";
 
 const canvas = ref<HTMLCanvasElement>();
@@ -144,7 +143,7 @@ onMounted(() => {
 });
 </script>
 <template>
-  <main class="container">
+  <main class="experience">
     <canvas :width="CANVAS_WIDTH" :height="CANVAS_HEIGHT" ref="canvas" />
     <div class="info">
       <button @click="() => render()">Render</button>
@@ -182,15 +181,6 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.container {
-  width: 100dvw;
-  height: 100dvh;
-  background-color: rgb(57, 96, 126);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Courier New', Courier, monospace;
-}
 
 .info {
   display: flex;
@@ -201,6 +191,7 @@ onMounted(() => {
   margin: 1rem;
   border-radius: 0.25rem;
   gap: 1rem;
+
   div {
     display: flex;
     flex-direction: column;

@@ -1,48 +1,52 @@
 # fbm
 
-This template should help get you started developing with Vue 3 in Vite.
+An experimentation repo for noise functions, WebGPU (WGSL), and ways to use noise. It's a sandbox, not a library: each experiment is a self-contained Vue component.
 
-## Recommended IDE Setup
+## What's here
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+### `src/experiments/CPUFBM.vue`: CPU value-noise fBm
 
-## Recommended Browser Setup
+Fractal Brownian motion built from value noise, computed on the CPU in TypeScript and drawn to an 800×450 `<canvas>` with `putImageData`.
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+- **Noise:** for each octave, a lattice of `Math.random()` values is generated and sampled with smoothstep interpolation between the four surrounding lattice points.
+- **fBm:** octaves are summed with `frequency = BASE_FREQUENCY * lacunarity^i` and `amplitude = persistence^i`, then normalized by the total amplitude to stay in `[0, 1]`.
+- **Usage, terrain coloring:** the result is mapped through threshold color bands (deep water → shallow water → shore → sand → grass → forest → rock → snow) to render a top-down map.
+- **Controls:**
+  - Octaves (0–10)
+  - Lacunarity (0–10)
+  - Persistence (0.1–0.95)
+  - A **Render** button
 
-## Type Support for `.vue` Imports in TS
+Changing lacunarity or persistence re-renders right away. Changing octaves takes effect when you press **Render**.
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+The lattice is re-randomized on every render, so each render gives a new map (there's no seed yet).
 
-## Customize configuration
+### Not yet here
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+- WebGPU / WGSL implementations (planned)
 
-## Project Setup
+## Structure
+
+```
+src/
+  main.ts              app entry
+  App.vue              mounts the current experiment
+  experiments/         one component per experiment
+  css/main.css         global styles
+```
+
+To switch experiments, change the component imported in `App.vue`.
+
+## Running
+
+Requires Node `^22.18.0 || >=24.12.0` and pnpm.
 
 ```sh
 pnpm install
+pnpm dev        # dev server with hot reload
+pnpm build      # type-check + production build
+pnpm lint       # oxlint + eslint
+pnpm format     # prettier on src/
 ```
 
-### Compile and Hot-Reload for Development
-
-```sh
-pnpm dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-pnpm build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-pnpm lint
-```
+Built with Vue 3, Vite, and TypeScript.
